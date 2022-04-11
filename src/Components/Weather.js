@@ -9,7 +9,7 @@ function Weather() {
     const {city} = useCity();
     useEffect(()=>{
         getCoordinate()
-    },[city])
+    })
 
     const getCoordinate = async () => {
         await axios(`https://api.openweathermap.org/data/2.5/weather?q=${city}&lang=tr&appid=4c87fdde1f3bfe4993325a6ae948e319`)
