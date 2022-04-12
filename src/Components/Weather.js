@@ -7,9 +7,6 @@ import {useCity} from "../Context/CityContext";
 function Weather() {
     const {weathers, setWeathers} = useWeather();
     const {city} = useCity();
-    useEffect(()=>{
-        getCoordinate()
-    })
 
     const getCoordinate = async () => {
         await axios(`https://api.openweathermap.org/data/2.5/weather?q=${city}&lang=tr&appid=4c87fdde1f3bfe4993325a6ae948e319`)
@@ -18,6 +15,9 @@ function Weather() {
             }
         )
     }
+    useEffect(()=>{
+        getCoordinate()
+    })
 
     const getWeatherData = async (lon,lat) => {
         await axios(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=hourly,minutely,current&lang=tr&appid=4c87fdde1f3bfe4993325a6ae948e319`)
