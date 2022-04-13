@@ -8,8 +8,6 @@ function Weather() {
   const { weathers, setWeathers } = useWeather();
   const { city } = useCity();
   const [show, setShow] = useState(false);
-  const [lat, setLat] = useState(0);
-  const [lon, setLon] = useState(0);
 
   useEffect(() => {
     function getCoordinateUrl() {
@@ -19,19 +17,13 @@ function Weather() {
       await axios(getCoordinateUrl())
         .then((res) => {
           setShow(false);
-          setLat(res.data.coord.lat);
-          setLon(res.data.coord.lon);
-          //getWeatherData(res.data.coord.lon, res.data.coord.lat);
+          getWeatherData(res.data.coord.lon, res.data.coord.lat);
         })
         .catch((err) => {
           setShow(true);
         });
     }
-    getCoordinate();
-  }, [city]);
-
-  useEffect(() => {
-    async function getWeatherData() {
+    async function getWeatherData(lon, lat) {
       await axios(
         `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=hourly,minutely,current&lang=tr&appid=5f05a8a95cdc6832fe3ac15e25ab1397`
       )
@@ -43,8 +35,8 @@ function Weather() {
           setShow(true);
         });
     }
-    getWeatherData();
-  }, [lat, lon, setWeathers]);
+    getCoordinate();
+  }, [city, setWeathers]);
 
   return (
     <>
@@ -59,7 +51,7 @@ function Weather() {
           <Card.Body>
             <Card.Title>
               {" "}
-              {new Date(weather.dt * 1000).toLocaleString("en-EN", {
+              {new Date(weather.dt * 1000).toLocaleString("tr-TR", {
                 weekday: "long",
               })}
             </Card.Title>
