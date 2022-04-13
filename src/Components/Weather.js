@@ -8,37 +8,43 @@ function Weather() {
   const { weathers, setWeathers } = useWeather();
   const { city } = useCity();
   const [show, setShow] = useState(false);
-
-  const getCoordinate = async () => {
-    await axios(
-      `https://api.openweathermap.org/data/2.5/weather?q=${city}&lang=tr&appid=4c87fdde1f3bfe4993325a6ae948e319`
-    )
-      .then((res) => {
-        setShow(false);
-        getWeatherData(res.data.coord.lon, res.data.coord.lat);
-      })
-      .catch((err) => {
-        setShow(true);
-      });
-  };
+  const [lat, setLat] = useState(0);
+  const [lon, setLon] = useState(0);
 
   useEffect(() => {
+    function getCoordinateUrl() {
+      return `https://api.openweathermap.org/data/2.5/weather?q=${city}&lang=tr&appid=5f05a8a95cdc6832fe3ac15e25ab1397`;
+    }
+    async function getCoordinate() {
+      await axios(getCoordinateUrl())
+        .then((res) => {
+          setShow(false);
+          setLat(res.data.coord.lat);
+          setLon(res.data.coord.lon);
+          //getWeatherData(res.data.coord.lon, res.data.coord.lat);
+        })
+        .catch((err) => {
+          setShow(true);
+        });
+    }
     getCoordinate();
   }, [city]);
 
-  const getWeatherData = async (lon, lat) => {
-    await axios(
-      `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=hourly,minutely,current&lang=tr&appid=4c87fdde1f3bfe4993325a6ae948e319`
-    )
-      .then((res) => {
-        setShow(false);
-        setWeathers(res.data.daily);
-        console.log(res);
-      })
-      .catch((err) => {
-        setShow(true);
-      });
-  };
+  useEffect(() => {
+    async function getWeatherData() {
+      await axios(
+        `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=hourly,minutely,current&lang=tr&appid=5f05a8a95cdc6832fe3ac15e25ab1397`
+      )
+        .then((res) => {
+          setShow(false);
+          setWeathers(res.data.daily);
+        })
+        .catch((err) => {
+          setShow(true);
+        });
+    }
+    getWeatherData();
+  }, [lat, lon, setWeathers]);
 
   return (
     <>
@@ -49,10 +55,7 @@ function Weather() {
       )}
 
       {weathers.map((weather, i) => (
-        <Card
-          key={i}
-          style={i === 1 ? { width: "9.5rem" } : { width: "10.5rem" }}
-        >
+        <Card key={i} style={{ width: "9.5rem" }}>
           <Card.Body>
             <Card.Title>
               {" "}
