@@ -11,7 +11,7 @@ function Weather() {
 
   useEffect(() => {
     function getCoordinateUrl() {
-      return `https://api.openweathermap.org/data/2.5/weather?q=${city}&lang=tr&appid=5f05a8a95cdc6832fe3ac15e25ab1397`;
+      return `https://api.openweathermap.org/data/2.5/weather?q=${city}&lang=tr&appid={apikey}`;
     }
     async function getCoordinate() {
       await axios(getCoordinateUrl())
@@ -25,7 +25,7 @@ function Weather() {
     }
     async function getWeatherData(lon, lat) {
       await axios(
-        `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=hourly,minutely,current&lang=tr&appid=5f05a8a95cdc6832fe3ac15e25ab1397`
+        `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=hourly,minutely,current&lang=tr&appid={apikey}`
       )
         .then((res) => {
           setShow(false);
