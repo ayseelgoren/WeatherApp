@@ -21,9 +21,10 @@ function Weather() {
         setShow(true);
       });
   };
+
   useEffect(() => {
     getCoordinate();
-  });
+  }, [city]);
 
   const getWeatherData = async (lon, lat) => {
     await axios(
